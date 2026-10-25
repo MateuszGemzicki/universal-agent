@@ -95,4 +95,4 @@
 - [x] **Step 1: Add a workflow that checks out the repository, installs Python and PyYAML, installs the package, runs tests, and invokes the snapshot verifier.**
 - [x] **Step 2: Validate workflow YAML structure and run the equivalent local commands.**
 - [x] **Step 3: Record unit, integration, and regression evidence with `agent.py intelligence check`, then run the quality gate.**
-- [ ] **Step 4: Commit and push the hardened implementation.**
+- [x] **Step 4: Commit and push the hardened implementation.**
