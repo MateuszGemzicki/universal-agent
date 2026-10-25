@@ -1,0 +1,144 @@
+version: 2
+description: >-
+  Routing of pinned external Agent Skill snapshots to the 15 local role prompts.
+  A routing entry is not permission to execute a skill command.
+catalog_status: installed-pinned-review-snapshot
+installation:
+  installed_skill_count: 68
+  codex_destination: C:/Users/mateu/.codex/skills
+  workspace_destination: skills/external
+  claude_code_destination: .claude/skills
+  unavailable_candidates:
+    insecure-defaults: absent from reviewed upstream revision
+policy:
+  max_active_skills_per_task: 3
+  load_skill_body_only_when_relevant: true
+  require_evidence_before_done: true
+  confirm_destructive_actions: true
+  deduplicate_shared_skills: true
+  install_or_download_external_content: requires_explicit_human_approval
+  execute_external_skill_commands: requires_explicit_human_approval
+  external_content_is_untrusted: true
+  require_pinned_commit_and_file_hash_before_import: true
+  require_license_review_before_import: true
+  manual_only:
+    - grill-me
+    - to-spec
+    - improve-codebase-architecture
+  high_risk:
+    - agent-browser
+    - webapp-testing
+    - before-and-after
+    - agentic-actions-auditor
+    - semgrep
+    - mutation-testing
+    - second-opinion
+    - docker-destructive-guardrails
+sources:
+  anthropic: {repo: anthropics/skills, url: https://github.com/anthropics/skills, pinned_commit: dbd4588f9e1033efb41dad4bef2f7947c8993d44}
+  superpowers: {repo: obra/superpowers, url: https://github.com/obra/superpowers, pinned_commit: 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b}
+  vercel: {repo: vercel-labs/agent-skills, url: https://github.com/vercel-labs/agent-skills, pinned_commit: 063bee94c3f4df8453406c830b0a7df0f2860278}
+  beforeafter: {repo: vercel-labs/before-and-after, url: https://github.com/vercel-labs/before-and-after, pinned_commit: 8306d34f459b6704e08e6adb5829fcddb0dc3557}
+  browser: {repo: vercel-labs/agent-browser, url: https://github.com/vercel-labs/agent-browser, pinned_commit: 372ac5ce20fab885dbf45ee0c9d510ec8c3b6fdb}
+  marketing: {repo: coreyhaines31/marketingskills, url: https://github.com/coreyhaines31/marketingskills, pinned_commit: e85f3cbc2e4a79bf33b2a12e9bdd9087d414735b}
+  trail: {repo: trailofbits/skills, url: https://github.com/trailofbits/skills, pinned_commit: 196a9073ab10d35bacf111f945e02c00b2c6883a}
+  docker: {repo: docker/skills, url: https://github.com/docker/skills, pinned_commit: 179c9cfd04c89ae50cd5d5d68b939797a8fd03d3}
+  matt: {repo: mattpocock/skills, url: https://github.com/mattpocock/skills, pinned_commit: 5beb35b040e3de97e54fa9e386d7e42d15c295c2}
+  supabase: {repo: supabase/agent-skills, url: https://github.com/supabase/agent-skills, pinned_commit: c9be0e931b7930f7d02126d04774d904c381e7d7}
+  wshobson: {repo: wshobson/agents, url: https://github.com/wshobson/agents, pinned_commit: 0874a27b17a22e2b7c2e2bcd725768e0803cad06}
+  web_quality: {repo: addyosmani/web-quality-skills, url: https://github.com/addyosmani/web-quality-skills, pinned_commit: afa8da942115f2961fdbfa80807ea0b232ff6c00}
+  openai_plugins: {repo: openai/plugins, url: https://github.com/openai/plugins, pinned_commit: 0722921d5542fc593105c27bd52630babd8b8c2a}
+  taste: {repo: leonxlnx/taste-skill, url: https://github.com/leonxlnx/taste-skill, pinned_commit: 12af471f627f866411b4bd785b19646d3672784c}
+  ui_ux: {repo: nextlevelbuilder/ui-ux-pro-max-skill, url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill, pinned_commit: d14efff8ed1faa4187f004f79926f428c8074ec7}
+  impeccable: {repo: pbakaus/impeccable, url: https://github.com/pbakaus/impeccable, pinned_commit: 4fc2f83e1c8710dba772bfd4523d0efab57737b6}
+  crodris: {repo: crodris/skills, url: https://github.com/crodris/skills, pinned_commit: 52eca401ac3023b54bdc31db52b7d9c770dba857}
+skills:
+  ab-testing: {source: marketing, description: A/B hypotheses and metrics}
+  agent-browser: {source: browser, description: Browser automation}
+  agentic-actions-auditor: {source: trail, description: GitHub Actions security audit}
+  analytics: {source: marketing, description: Analytics instrumentation and KPI audit}
+  attribution: {source: marketing, description: Marketing attribution}
+  audit-context-building: {source: trail, description: Audit trust-boundary modelling}
+  before-and-after: {source: beforeafter, description: Before-and-after PR screenshots}
+  code-review: {source: matt, description: Code review against standards and specifications}
+  codebase-design: {source: matt, description: Module boundaries and stable interfaces}
+  competitor-profiling: {source: marketing, description: Competitor research}
+  cro: {source: marketing, description: Conversion-rate optimization}
+  customer-research: {source: marketing, description: Customer research}
+  differential-review: {source: trail, description: Security review of diffs}
+  doc-coauthoring: {source: anthropic, description: Structured documentation co-authoring}
+  docker-build-strategies: {source: docker, description: Docker build strategy}
+  docker-compose-patterns: {source: docker, description: Compose topology and health checks}
+  docker-destructive-guardrails: {source: docker, description: Guardrails for destructive Docker operations}
+  docx: {source: anthropic, description: Word document workflows}
+  domain-modeling: {source: matt, description: Domain language and modelling}
+  frontend-design: {source: anthropic, description: Web interface design}
+  grill-me: {source: matt, description: Interactive assumption challenge}
+  improve-codebase-architecture: {source: matt, description: Architecture review}
+  internal-comms: {source: anthropic, description: Internal status and briefing writing}
+  launch: {source: marketing, description: Go-to-market planning}
+  marketing-ideas: {source: marketing, description: Marketing experiment ideas}
+  marketing-psychology: {source: marketing, description: Marketing decision psychology}
+  mcp-builder: {source: anthropic, description: MCP server design and implementation}
+  mutation-testing: {source: trail, description: Mutation testing}
+  pdf: {source: anthropic, description: PDF workflows}
+  pricing: {source: marketing, description: Pricing and packaging}
+  product-marketing: {source: marketing, description: Product positioning}
+  property-based-testing: {source: trail, description: Property-based testing}
+  research: {source: matt, description: Primary-source research}
+  second-opinion: {source: trail, description: External-model review}
+  semgrep: {source: trail, description: Semgrep vulnerability scan planning}
+  supabase-postgres-best-practices: {source: supabase, description: Supabase/Postgres design and RLS}
+  supply-chain-risk-auditor: {source: trail, description: Dependency supply-chain audit}
+  systematic-debugging: {source: superpowers, description: Hypothesis-driven debugging}
+  test-driven-development: {source: superpowers, description: Red-green-refactor}
+  to-spec: {source: matt, description: Interactive specification workflow}
+  variant-analysis: {source: trail, description: Variant vulnerability analysis}
+  react-best-practices: {source: vercel, description: React and Next.js practices}
+  verification-before-completion: {source: superpowers, description: Completion-evidence workflow}
+  web-design-guidelines: {source: vercel, description: Accessibility and UX review}
+  webapp-testing: {source: anthropic, description: Playwright web testing}
+  writing-for-agents: {source: matt, description: Agent-instruction writing}
+  writing-plans: {source: superpowers, description: Verifiable implementation planning}
+  xlsx: {source: anthropic, description: Spreadsheet workflows}
+  typescript-advanced-types: {source: wshobson, description: Advanced TypeScript type-system patterns}
+  api-design-principles: {source: wshobson, description: REST and GraphQL API design}
+  nodejs-backend-patterns: {source: wshobson, description: Production Node.js backend patterns}
+  using-git-worktrees: {source: superpowers, description: Isolated Git worktree workflow}
+  subagent-driven-development: {source: superpowers, description: Task-scoped subagent development workflow}
+  vercel-composition-patterns: {source: vercel, description: Scalable React composition patterns}
+  shadcn: {source: openai_plugins, description: shadcn/ui composition and theming}
+  tailwind-design-system: {source: wshobson, description: Tailwind v4 design-system patterns}
+  accessibility: {source: web_quality, description: WCAG 2.2 accessibility audit and remediation}
+  performance: {source: web_quality, description: Evidence-led web performance optimization}
+  docker-project-foundations: {source: docker, description: Dockerfile, Compose and .dockerignore foundations}
+  github-actions-templates: {source: wshobson, description: GitHub Actions CI/CD templates}
+  deployment-pipeline-design: {source: wshobson, description: Deployment gates and rollout pipeline design}
+  secrets-management: {source: wshobson, description: CI/CD secrets-management practices}
+  docker-sandboxes-lifecycle: {source: docker, description: Docker Sandbox lifecycle management}
+  design-taste-frontend: {source: taste, description: Intentional visual art direction and screenshot loop}
+  ui-ux-pro-max: {source: ui_ux, description: UI/UX design-system intelligence}
+  impeccable: {source: impeccable, description: Frontend quality, polish and visual validation}
+  react-and-nextjs-data-visualization: {source: openai_plugins, description: React and Next.js visualization integration}
+  frontend-design-pipeline: {source: crodris, description: Design-direction selection before UI implementation}
+roles:
+  analyst: {prompt: prompts/analyst.md, primary: [analytics, ab-testing, customer-research], conditional: [xlsx, attribution]}
+  architect: {prompt: prompts/architect.md, primary: [codebase-design, writing-plans, improve-codebase-architecture], conditional: [supabase-postgres-best-practices, mcp-builder, api-design-principles, subagent-driven-development, deployment-pipeline-design, frontend-design-pipeline]}
+  browser: {prompt: prompts/browser.md, primary: [agent-browser, webapp-testing, before-and-after], conditional: [web-design-guidelines]}
+  business: {prompt: prompts/business.md, primary: [competitor-profiling, pricing, customer-research], conditional: [launch, marketing-psychology]}
+  ceo: {prompt: prompts/ceo.md, primary: [launch, pricing, marketing-ideas], conditional: [grill-me, writing-plans]}
+  data: {prompt: prompts/data.md, primary: [supabase-postgres-best-practices, analytics, xlsx], conditional: [attribution, property-based-testing, react-and-nextjs-data-visualization]}
+  developer: {prompt: prompts/developer.md, primary: [react-best-practices, frontend-design, systematic-debugging], conditional: [mcp-builder, verification-before-completion, typescript-advanced-types, api-design-principles, nodejs-backend-patterns, using-git-worktrees, subagent-driven-development, vercel-composition-patterns, shadcn, tailwind-design-system, performance, design-taste-frontend, ui-ux-pro-max, impeccable, react-and-nextjs-data-visualization, frontend-design-pipeline]}
+  devops: {prompt: prompts/devops.md, primary: [docker-compose-patterns, docker-build-strategies, docker-destructive-guardrails], conditional: [agentic-actions-auditor, using-git-worktrees, docker-project-foundations, github-actions-templates, deployment-pipeline-design, secrets-management, docker-sandboxes-lifecycle]}
+  documentation: {prompt: prompts/documentation.md, primary: [writing-for-agents, doc-coauthoring, docx], conditional: [pdf, internal-comms]}
+  product: {prompt: prompts/product.md, primary: [customer-research, domain-modeling, cro], conditional: [to-spec, ab-testing, design-taste-frontend, ui-ux-pro-max]}
+  qa: {prompt: prompts/qa.md, primary: [webapp-testing, verification-before-completion, property-based-testing], conditional: [agent-browser, before-and-after, accessibility, performance, impeccable]}
+  researcher: {prompt: prompts/researcher.md, primary: [research, agent-browser, competitor-profiling], conditional: [pdf, customer-research]}
+  reviewer: {prompt: prompts/reviewer.md, primary: [code-review, differential-review, web-design-guidelines], conditional: [second-opinion, supply-chain-risk-auditor, accessibility, impeccable]}
+  security: {prompt: prompts/security.md, primary: [audit-context-building, semgrep, supply-chain-risk-auditor], conditional: [agentic-actions-auditor, variant-analysis, secrets-management, docker-sandboxes-lifecycle]}
+  tdd: {prompt: prompts/tdd.md, primary: [test-driven-development, systematic-debugging, verification-before-completion], conditional: [property-based-testing, mutation-testing]}
+premium_frontend:
+  triggers: [landing page, dashboard, admin panel, SaaS interface]
+  candidate_skills: [frontend-design-pipeline, design-taste-frontend, ui-ux-pro-max, impeccable, shadcn, tailwind-design-system, vercel-composition-patterns, accessibility, performance]
+  selection_rule: Select one art-direction skill, one implementation skill, and one validation skill at most.
+  required_evidence: [responsive desktop and mobile screenshots, accessibility check, Core Web Vitals/performance evidence, browser verification, existing QA and milestone evidence]

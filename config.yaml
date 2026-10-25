@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "name": "example-app",
+      "path": "D:\\DEV\\factory-platform",
+      "enabled": true,
+      "language": "auto",
+      "test_command": []
+    },
+    {
+      "name": "venture-lab",
+      "path": "D:\\DEV\\venture-lab",
+      "enabled": true,
+      "language": "auto",
+      "test_command": ["D:\\DEV\\venture-lab\\.venv\\Scripts\\python.exe", "-m", "pytest", "-q"]
+    }
+  ],
+  "settings": {
+    "max_test_seconds": 300,
+    "max_file_mb": 5,
+    "browser_base_url": "http://localhost:3000",
+    "allow_external_writes": true
+  },
+  "ai_budget": {
+    "mode": "economy",
+    "max_context_tokens_hint": 12000,
+    "max_output_tokens_hint": 1200,
+    "require_approval_for_full_semantic_scan": true,
+    "note": "Advisory only: the Python CLI cannot enforce token billing limits of Codex/Claude/Gemini."
+  },
+  "lsp_servers": {
+    "python": [
+      "pyright-langserver",
+      "--stdio"
+    ],
+    "typescript": [
+      "typescript-language-server",
+      "--stdio"
+    ]
+  }
+}

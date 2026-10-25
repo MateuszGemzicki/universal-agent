@@ -1,0 +1,4 @@
+# Vendored skill snapshots are verified by byte hash and must not be
+# transformed by platform-specific line-ending settings.
+.claude/skills/** -text
+skills/external/** -text
