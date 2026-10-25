@@ -6,6 +6,7 @@ name = "codex-multi-repo-system"
 version = "1.0.0"
 requires-python = ">=3.11"
 description = "Codex native multi repository engineering workspace"
+dependencies = ["PyYAML>=6.0"]
 [project.scripts]
 agentctl = "agent_system.cli:main"
 [tool.setuptools.packages.find]

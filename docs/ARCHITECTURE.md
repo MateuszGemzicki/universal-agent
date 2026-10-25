@@ -15,7 +15,7 @@ Merkle-style SHA-256 hashes of directory entries; file hashes of bytes; future A
 Git-tracked Markdown, prompts, skills and scripts; SQLite for initial state and audit trail; migrate to PostgreSQL when concurrency requires it. File content is not persisted in SQLite.
 
 ## Approvals
-Generated CMD scripts must be reviewed and approved before each execution (unless the user explicitly creates a narrower repeat-approval policy). Store exact script SHA-256, arguments, requesting agent, expiry and result. Never run unapproved scripts. Secrets never enter prompts or logs.
+Generated CMD scripts must be reviewed and approved before each execution. Each approval stores the exact script SHA-256 and argv, expires after its declared TTL, and is consumed before launch; the exit result is recorded without persisting script output. Never run unapproved scripts. Secrets never enter prompts or logs.
 
 ## Browser
 Use one controlled browser service; record routes as reproducible Playwright scripts. On first successful visit record stable locators and assertions; on subsequent runs replay until failure, then propose a repair. Browser execution requires an isolated profile and domain allowlist.

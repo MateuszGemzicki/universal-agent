@@ -1,6 +1,7 @@
 import argparse, hashlib, json, os, re, shutil, sqlite3, subprocess, sys
 from pathlib import Path
 from .core import connect, scan, timestamp
+from . import approvals
 ROOT = Path(__file__).resolve().parents[2]
 DB = ROOT / '.agent-system' / 'state.sqlite3'
 def emit(x): print(json.dumps(x, ensure_ascii=False, indent=2))
@@ -15,13 +16,24 @@ def config():
         if r['name'] in names: raise ValueError('Duplicate repo name')
         names.add(r['name'])
     return data
+def resolve_test_command(config_data, repo_name, explicit_argv):
+    """Return an explicit test argv or the reviewed command registered for a repo."""
+    if explicit_argv:
+        return list(explicit_argv)
+    for repo in config_data.get('repositories', []):
+        if repo.get('name') == repo_name:
+            command = repo.get('test_command', [])
+            if isinstance(command, list) and command:
+                return list(command)
+            break
+    raise ValueError(f'No test command configured for {repo_name}; supply one after --')
 def repo_path(db,name):
     row=db.execute('SELECT path FROM repositories WHERE name=?',(name,)).fetchone()
     if not row: raise ValueError('Unknown repository: '+name)
     return Path(row[0])
 def setup(db):
+    approvals.init(db)
     db.executescript("""
-    CREATE TABLE IF NOT EXISTS approvals_v2(id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, path TEXT NOT NULL, sha256 TEXT NOT NULL, purpose TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS prompt_versions(id INTEGER PRIMARY KEY AUTOINCREMENT, role TEXT NOT NULL, sha256 TEXT NOT NULL, content TEXT NOT NULL, created_at TEXT NOT NULL);
     """)
     db.commit()
@@ -70,9 +82,9 @@ def main():
     inv=s.add_parser('inventory');inv.add_argument('repo')
     task=s.add_parser('task');task.add_argument('goal')
     test=s.add_parser('test');test.add_argument('repo');test.add_argument('args',nargs=argparse.REMAINDER)
-    prop=s.add_parser('propose-script');prop.add_argument('path');prop.add_argument('purpose')
+    prop=s.add_parser('propose-script');prop.add_argument('path');prop.add_argument('purpose');prop.add_argument('--ttl-seconds',type=int,default=approvals.DEFAULT_TTL_SECONDS);prop.add_argument('args',nargs=argparse.REMAINDER)
     approve=s.add_parser('approve');approve.add_argument('id',type=int)
-    run=s.add_parser('run-script');run.add_argument('id',type=int);run.add_argument('args',nargs=argparse.REMAINDER)
+    run=s.add_parser('run-script');run.add_argument('id',type=int)
     browser=s.add_parser('browser');browser.add_argument('url',nargs='?',default='http://localhost:3000')
     ps=s.add_parser('prompt-set');ps.add_argument('role');ps.add_argument('file')
     args=p.parse_args();db=connect(DB);setup(db)
@@ -98,29 +110,37 @@ def main():
         elif args.command=='requests':emit([{'id':i,'kind':k,'path':path,'sha256':h,'purpose':purpose,'state':st} for i,k,path,h,purpose,st in db.execute('SELECT id,kind,path,sha256,purpose,state FROM approvals_v2 ORDER BY id DESC')])
         elif args.command=='propose-script':
             path=script_path(args.path);h=sha(path)
-            with db:cur=db.execute('INSERT INTO approvals_v2(kind,path,sha256,purpose,created_at) VALUES(?,?,?,?,?)',('cmd',str(path),h,args.purpose,timestamp()))
-            emit({'request_id':cur.lastrowid,'path':str(path),'sha256':h,'status':'pending','instruction':'Human reviews file and executes: python agent.py approve '+str(cur.lastrowid)})
-        elif args.command=='approve':
-            row=db.execute('SELECT path,sha256,state FROM approvals_v2 WHERE id=?',(args.id,)).fetchone()
-            if not row:raise ValueError('Approval request not found')
-            path=script_path(row[0]);
-            if sha(path)!=row[1]:raise ValueError('Script changed: propose again')
-            with db:db.execute("UPDATE approvals_v2 SET state='approved' WHERE id=?",(args.id,))
-            emit({'approved':args.id,'sha256':row[1]})
-        elif args.command=='run-script':
-            if os.name!='nt':raise ValueError('CMD execution requires Windows')
-            row=db.execute('SELECT path,sha256,state FROM approvals_v2 WHERE id=?',(args.id,)).fetchone()
-            if not row or row[2]!='approved':raise ValueError('Exact script has not been approved')
-            path=script_path(row[0]);
-            if sha(path)!=row[1]:raise ValueError('Script changed after approval')
             argv=args.args[1:] if args.args[:1]==['--'] else args.args
             if any(re.search(r'[&|<>^%\r\n"]',a) for a in argv):raise ValueError('Unsafe CMD argument')
-            proc=subprocess.run(['cmd.exe','/d','/s','/c',str(path),*argv],cwd=ROOT,timeout=300,check=False)
+            request=approvals.propose(db,path=str(path),sha256=h,purpose=args.purpose,argv=argv,ttl_seconds=args.ttl_seconds)
+            emit({'request_id':request['id'],'path':str(path),'sha256':h,'argv':argv,'expires_at':request['expires_at'],'status':'pending','instruction':'Human reviews and approves: python agent.py approve '+str(request['id'])})
+        elif args.command=='approve':
+            record=approvals._row(db,args.id)
+            path=script_path(str(record['path']))
+            if sha(path)!=record['sha256']:raise ValueError('Script changed: propose again')
+            approved=approvals.approve(db,args.id)
+            emit({'approved':args.id,'sha256':approved['sha256'],'expires_at':approved['expires_at'],'argv':json.loads(str(approved['argv_json']))})
+        elif args.command=='run-script':
+            if os.name!='nt':raise ValueError('CMD execution requires Windows')
+            claim=approvals.claim_for_execution(db,args.id)
+            path=script_path(str(claim['path']))
+            if sha(path)!=claim['sha256']:
+                approvals.record_execution(db,approval_id=args.id,argv=claim['argv'],exit_code=126,output='script_hash_changed')
+                raise ValueError('Script changed after approval')
+            try:
+                proc=subprocess.run(['cmd.exe','/d','/s','/c',str(path),*claim['argv']],cwd=ROOT,timeout=300,check=False)
+            except subprocess.TimeoutExpired:
+                approvals.record_execution(db,approval_id=args.id,argv=claim['argv'],exit_code=124,output='timed_out')
+                raise ValueError('Script timed out')
+            except OSError:
+                approvals.record_execution(db,approval_id=args.id,argv=claim['argv'],exit_code=127,output='launch_failed')
+                raise
+            approvals.record_execution(db,approval_id=args.id,argv=claim['argv'],exit_code=proc.returncode,output='completed' if proc.returncode==0 else 'failed')
             raise SystemExit(proc.returncode)
         elif args.command=='test':
             root=repo_path(db,args.repo)
-            argv=args.args[1:] if args.args[:1]==['--'] else args.args
-            if not argv:raise ValueError('Supply a test command after --')
+            explicit=args.args[1:] if args.args[:1]==['--'] else args.args
+            argv=resolve_test_command(config(),args.repo,explicit)
             print('WARNING: This executes code in a repository. Confirm human authorization before use.',flush=True)
             try:
                 result=subprocess.run(argv,cwd=root,capture_output=True,text=True,timeout=config().get('settings',{}).get('max_test_seconds',300),shell=False)

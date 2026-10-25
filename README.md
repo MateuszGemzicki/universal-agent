@@ -7,8 +7,11 @@ python agent.py doctor
 python agent.py sync
 python agent.py scan-all
 python agent.py docs
+python scripts/verify_skill_snapshots.py
 codex   # or: claude / gemini
 ```
+
+Run the reviewed test command registered for a repository with `python agent.py test REPO`; provide an explicit override only after `--`, for example `python agent.py test venture-lab -- python -m pytest -q`.
 
 The `config.yaml` file is JSON-compatible YAML 1.2 (no extra parser needed). Set `enabled: true` (JSON syntax: `"enabled": true`) and correct paths for your repositories. Instructions for Codex are in `AGENTS.md`, Claude Code in `CLAUDE.md`, Gemini CLI in `GEMINI.md`, GitHub Copilot in `.github/copilot-instructions.md`, with shared rules in `docs/SHARED_POLICY.md`.
 
@@ -23,6 +26,7 @@ See `docs/PROVIDERS.md`, `docs/ARCHITECTURE.md`, `docs/OPERATING_RULES.md` and `
 ```powershell
 python -m pip install -e .
 python -m unittest discover -s tests -v
+python scripts/verify_skill_snapshots.py
 ```
 
 ## Version 2 extensions

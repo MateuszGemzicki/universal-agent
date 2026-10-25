@@ -19,8 +19,7 @@
   "settings": {
     "max_test_seconds": 300,
     "max_file_mb": 5,
-    "browser_base_url": "http://localhost:3000",
-    "allow_external_writes": true
+    "browser_base_url": "http://localhost:3000"
   },
   "ai_budget": {
     "mode": "economy",
