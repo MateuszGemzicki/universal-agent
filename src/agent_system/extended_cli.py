@@ -1,7 +1,7 @@
 import argparse,json,sqlite3
 from pathlib import Path
 from . import intelligence as I
-from .core import connect,timestamp
+from .core import connect,scan,timestamp
 ROOT=Path(__file__).resolve().parents[2]
 def emit(x):print(json.dumps(x,indent=2,ensure_ascii=False))
 def run(argv):
@@ -20,6 +20,10 @@ def run(argv):
     be=s.add_parser('benchmark');be.add_argument('task');be.add_argument('provider');be.add_argument('success',type=int,choices=[0,1]);be.add_argument('seconds',type=float);be.add_argument('--tokens',type=int);be.add_argument('--model',default='');be.add_argument('--interventions',type=int,default=0)
     s.add_parser('benchmark-report')
     a=p.parse_args(argv);db=connect(ROOT/'.agent-system/state.sqlite3');I.init(db)
+    if a.cmd in ('search','context','impact','stale'):
+        # Incremental rescan (~1-2 s) so retrieval never serves line numbers from an old index.
+        from .cli import sync
+        for name in sync(db):scan(db,name)
     if a.cmd=='search':emit(I.search(db,a.query))
     elif a.cmd=='context':emit(I.context(db,a.query,a.budget))
     elif a.cmd=='impact':emit(I.impact(db,a.repo,a.path))

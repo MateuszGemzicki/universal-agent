@@ -39,10 +39,10 @@ The following commands are available from the workspace root (run `python agent.
 ```sh
 # 1. Tree-sitter symbols (optional package; Python AST fallback)
 python -m pip install tree-sitter-language-pack
-python agent.py advanced parse example-app src/main.py
+python agent.py advanced parse factory-platform src/main.py
 
 # 2. LSP definition / references (install language server separately)
-python agent.py advanced lsp example-app src/main.py 12 5 --server python --operation references
+python agent.py advanced lsp factory-platform src/main.py 12 5 --server python --operation references
 
 # 3. Test coverage mapping (coverage.py JSON or Istanbul JSON)
 python agent.py advanced coverage coverage.json src/main.py
@@ -54,7 +54,7 @@ python agent.py advanced contracts old-openapi.json new-openapi.json
 python agent.py advanced redact input.txt --output redacted.txt
 
 # 7. Single Python mutation smoke test in isolated temporary copy
-python agent.py advanced mutate example-app src/main.py --confirm -- python -m pytest -q
+python agent.py advanced mutate factory-platform src/main.py --confirm -- python -m pytest -q
 ```
 
 **Limits:** Tree-sitter is syntax parsing, not type resolution; LSP requires a separately installed language server and may depend on project setup. Coverage maps only previously generated coverage reports. OpenAPI diff checks a subset of breaking changes (JSON OpenAPI 3, no `$ref` resolution). Redaction is not a substitute for DLP or secret isolation. Mutation testing is one deterministic mutant per invocation, not a full mutation-testing platform. No arbitrary external code execution is performed by scanning or parsing; test execution requires explicit `--confirm`.

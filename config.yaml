@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repositories": [
     {
-      "name": "example-app",
+      "name": "factory-platform",
       "path": "D:\\DEV\\factory-platform",
       "enabled": true,
       "language": "auto",
