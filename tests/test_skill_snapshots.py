@@ -11,7 +11,7 @@ from agent_system.skill_integrity import verify
 class SkillSnapshotTests(unittest.TestCase):
     def test_every_routed_skill_has_an_exact_locked_snapshot(self):
         result = verify(ROOT)
-        self.assertEqual(68, result["expected_count"])
+        self.assertEqual(72, result["expected_count"])
         self.assertTrue(result["ok"], result["errors"])
         self.assertEqual([], result["errors"])
 

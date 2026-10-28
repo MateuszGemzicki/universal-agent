@@ -17,4 +17,4 @@ Return an operational plan, changed components/configuration, deployment and rol
 Do not deploy, rotate credentials, change production configuration or execute destructive operations without explicit authorization. Never place secrets in source, prompts, logs or screenshots.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.devops`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.devops`; select at most five relevant skills and load their full instructions only when needed.

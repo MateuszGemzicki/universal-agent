@@ -17,4 +17,4 @@ Return a context diagram or concise component map, decision record, API/data-con
 Avoid speculative platforms and abstractions. Do not approve or implement a design by assumption; escalate unresolved product, security or operational decisions to the accountable owner.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.architect`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.architect`; select at most five relevant skills and load their full instructions only when needed.

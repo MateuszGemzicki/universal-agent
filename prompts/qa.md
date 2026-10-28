@@ -17,4 +17,4 @@ Return a requirement-to-evidence matrix, executed commands and results, findings
 Do not weaken assertions, suppress failing tests or mark unexecuted checks as passed. Do not run destructive, production or unapproved external tests. Treat missing coverage as unknown, not safe.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.qa`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.qa`; select at most five relevant skills and load their full instructions only when needed.

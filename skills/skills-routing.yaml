@@ -4,14 +4,14 @@ description: >-
   A routing entry is not permission to execute a skill command.
 catalog_status: installed-pinned-review-snapshot
 installation:
-  installed_skill_count: 68
+  installed_skill_count: 72
   codex_destination: C:/Users/mateu/.codex/skills
   workspace_destination: skills/external
   claude_code_destination: .claude/skills
   unavailable_candidates:
     insecure-defaults: absent from reviewed upstream revision
 policy:
-  max_active_skills_per_task: 3
+  max_active_skills_per_task: 5
   load_skill_body_only_when_relevant: true
   require_evidence_before_done: true
   confirm_destructive_actions: true
@@ -34,6 +34,9 @@ policy:
     - mutation-testing
     - second-opinion
     - docker-destructive-guardrails
+    - agent-reach
+    - hyperframes
+    - find-skills
 sources:
   anthropic: {repo: anthropics/skills, url: https://github.com/anthropics/skills, pinned_commit: dbd4588f9e1033efb41dad4bef2f7947c8993d44}
   superpowers: {repo: obra/superpowers, url: https://github.com/obra/superpowers, pinned_commit: 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b}
@@ -52,7 +55,15 @@ sources:
   ui_ux: {repo: nextlevelbuilder/ui-ux-pro-max-skill, url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill, pinned_commit: d14efff8ed1faa4187f004f79926f428c8074ec7}
   impeccable: {repo: pbakaus/impeccable, url: https://github.com/pbakaus/impeccable, pinned_commit: 4fc2f83e1c8710dba772bfd4523d0efab57737b6}
   crodris: {repo: crodris/skills, url: https://github.com/crodris/skills, pinned_commit: 52eca401ac3023b54bdc31db52b7d9c770dba857}
+  hyperframes: {repo: heygen-com/hyperframes, url: https://github.com/heygen-com/hyperframes, pinned_commit: 2ddf41eb7d0b3aa7a8ee7d267b5090e852bc215e}
+  vercel_skills: {repo: vercel-labs/skills, url: https://github.com/vercel-labs/skills, pinned_commit: 699d35b21bd3c97dbc0edeae062b2698898bb2e5}
+  skillspector: {repo: NVIDIA/SkillSpector, url: https://github.com/NVIDIA/SkillSpector, pinned_commit: e7172462caf367736645f66c1aa154ca5f9c64dc}
+  agent_reach: {repo: Panniantong/Agent-Reach, url: https://github.com/Panniantong/Agent-Reach, pinned_commit: 14c213405669414492bda0f8d52cc6531d062c45}
 skills:
+  agent-reach: {source: agent_reach, description: Read-only social and platform content access (upstream SKILL_en.md)}
+  find-skills: {source: vercel_skills, description: Discover candidate skills; installs still need review and approval}
+  hyperframes: {source: hyperframes, description: HTML-to-video authoring and rendering}
+  skill-inspector: {source: skillspector, description: SkillSpector static scan plus semantic review of skills}
   ab-testing: {source: marketing, description: A/B hypotheses and metrics}
   agent-browser: {source: browser, description: Browser automation}
   agentic-actions-auditor: {source: trail, description: GitHub Actions security audit}
@@ -123,19 +134,19 @@ skills:
   frontend-design-pipeline: {source: crodris, description: Design-direction selection before UI implementation}
 roles:
   analyst: {prompt: prompts/analyst.md, primary: [analytics, ab-testing, customer-research], conditional: [xlsx, attribution]}
-  architect: {prompt: prompts/architect.md, primary: [codebase-design, writing-plans, improve-codebase-architecture], conditional: [supabase-postgres-best-practices, mcp-builder, api-design-principles, subagent-driven-development, deployment-pipeline-design, frontend-design-pipeline]}
-  browser: {prompt: prompts/browser.md, primary: [agent-browser, webapp-testing, before-and-after], conditional: [web-design-guidelines]}
+  architect: {prompt: prompts/architect.md, primary: [codebase-design, writing-plans, improve-codebase-architecture], conditional: [supabase-postgres-best-practices, mcp-builder, api-design-principles, subagent-driven-development, deployment-pipeline-design, frontend-design-pipeline, find-skills]}
+  browser: {prompt: prompts/browser.md, primary: [agent-browser, webapp-testing, before-and-after], conditional: [web-design-guidelines, agent-reach]}
   business: {prompt: prompts/business.md, primary: [competitor-profiling, pricing, customer-research], conditional: [launch, marketing-psychology]}
   ceo: {prompt: prompts/ceo.md, primary: [launch, pricing, marketing-ideas], conditional: [grill-me, writing-plans]}
   data: {prompt: prompts/data.md, primary: [supabase-postgres-best-practices, analytics, xlsx], conditional: [attribution, property-based-testing, react-and-nextjs-data-visualization]}
-  developer: {prompt: prompts/developer.md, primary: [react-best-practices, frontend-design, systematic-debugging], conditional: [mcp-builder, verification-before-completion, typescript-advanced-types, api-design-principles, nodejs-backend-patterns, using-git-worktrees, subagent-driven-development, vercel-composition-patterns, shadcn, tailwind-design-system, performance, design-taste-frontend, ui-ux-pro-max, impeccable, react-and-nextjs-data-visualization, frontend-design-pipeline]}
+  developer: {prompt: prompts/developer.md, primary: [react-best-practices, frontend-design, systematic-debugging], conditional: [mcp-builder, verification-before-completion, typescript-advanced-types, api-design-principles, nodejs-backend-patterns, using-git-worktrees, subagent-driven-development, vercel-composition-patterns, shadcn, tailwind-design-system, performance, design-taste-frontend, ui-ux-pro-max, impeccable, react-and-nextjs-data-visualization, frontend-design-pipeline, hyperframes]}
   devops: {prompt: prompts/devops.md, primary: [docker-compose-patterns, docker-build-strategies, docker-destructive-guardrails], conditional: [agentic-actions-auditor, using-git-worktrees, docker-project-foundations, github-actions-templates, deployment-pipeline-design, secrets-management, docker-sandboxes-lifecycle]}
   documentation: {prompt: prompts/documentation.md, primary: [writing-for-agents, doc-coauthoring, docx], conditional: [pdf, internal-comms]}
-  product: {prompt: prompts/product.md, primary: [customer-research, domain-modeling, cro], conditional: [to-spec, ab-testing, design-taste-frontend, ui-ux-pro-max]}
+  product: {prompt: prompts/product.md, primary: [customer-research, domain-modeling, cro], conditional: [to-spec, ab-testing, design-taste-frontend, ui-ux-pro-max, hyperframes]}
   qa: {prompt: prompts/qa.md, primary: [webapp-testing, verification-before-completion, property-based-testing], conditional: [agent-browser, before-and-after, accessibility, performance, impeccable]}
-  researcher: {prompt: prompts/researcher.md, primary: [research, agent-browser, competitor-profiling], conditional: [pdf, customer-research]}
-  reviewer: {prompt: prompts/reviewer.md, primary: [code-review, differential-review, web-design-guidelines], conditional: [second-opinion, supply-chain-risk-auditor, accessibility, impeccable]}
-  security: {prompt: prompts/security.md, primary: [audit-context-building, semgrep, supply-chain-risk-auditor], conditional: [agentic-actions-auditor, variant-analysis, secrets-management, docker-sandboxes-lifecycle]}
+  researcher: {prompt: prompts/researcher.md, primary: [research, agent-browser, competitor-profiling], conditional: [pdf, customer-research, agent-reach]}
+  reviewer: {prompt: prompts/reviewer.md, primary: [code-review, differential-review, web-design-guidelines], conditional: [second-opinion, supply-chain-risk-auditor, accessibility, impeccable, skill-inspector]}
+  security: {prompt: prompts/security.md, primary: [audit-context-building, semgrep, supply-chain-risk-auditor, skill-inspector], conditional: [agentic-actions-auditor, variant-analysis, secrets-management, docker-sandboxes-lifecycle]}
   tdd: {prompt: prompts/tdd.md, primary: [test-driven-development, systematic-debugging, verification-before-completion], conditional: [property-based-testing, mutation-testing]}
 premium_frontend:
   triggers: [landing page, dashboard, admin panel, SaaS interface]

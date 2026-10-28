@@ -33,8 +33,8 @@ class SkillRoutingTests(unittest.TestCase):
         for role, config in self.route["roles"].items():
             self.assertTrue((ROOT / config["prompt"]).is_file(), role)
             self.assertTrue(set(config["primary"] + config["conditional"]) <= known, role)
-            self.assertLessEqual(len(config["primary"]), 3, role)
-        self.assertEqual(3, self.route["policy"]["max_active_skills_per_task"])
+            self.assertLessEqual(len(config["primary"]), 5, role)
+        self.assertEqual(5, self.route["policy"]["max_active_skills_per_task"])
         self.assertTrue(self.route["policy"]["load_skill_body_only_when_relevant"])
 
     def test_affected_role_prompts_point_to_their_routing_entry(self):

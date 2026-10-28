@@ -4,7 +4,7 @@ Create a directory per reusable workflow with `SKILL.md`: triggers, prerequisite
 
 ## External skill catalog
 
-`skills-routing.yaml` routes the 15 local role prompts to reviewed, pinned snapshots. The 68 available third-party snapshots are vendored under `skills/external/` and installed in `C:\Users\mateu\.codex\skills`; the latest 20 are also available to Claude Code in `.claude/skills/`. This does not grant permissions or authorize commands. `insecure-defaults` was not installed because it no longer exists in the reviewed upstream revision.
+`skills-routing.yaml` routes the 15 local role prompts to reviewed, pinned snapshots. The 72 available third-party snapshots are vendored under `skills/external/` and installed in `C:\Users\mateu\.codex\skills`; the latest 24 are also available to Claude Code in `.claude/skills/`. This does not grant permissions or authorize commands. `insecure-defaults` was not installed because it no longer exists in the reviewed upstream revision.
 
 Before importing an update, pin a full upstream commit, verify the file hash and licence, review its instructions and scripts, record the reviewer and expose only the minimum required tools. High-risk candidates (browser, CI/CD, infrastructure, security scanners and external-model workflows) require explicit human approval for each operational use. Read the licence notes in `SECURITY_REVIEW.md` before redistributing vendored copies.
 

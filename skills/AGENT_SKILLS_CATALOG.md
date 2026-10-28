@@ -1,12 +1,12 @@
 # Curated Agent Skills Catalog
 
-This catalog covers 68 reviewed, pinned upstream snapshots installed for Codex and vendored under `skills/external/`. The latest 20 are also installed in `.claude/skills/` for Claude Code. The executable source of routing is [skills-routing.yaml](skills-routing.yaml); it does not grant a skill authority to run commands or access systems.
+This catalog covers 72 reviewed, pinned upstream snapshots installed for Codex and vendored under `skills/external/`. The latest 24 are also installed in `.claude/skills/` for Claude Code. The executable source of routing is [skills-routing.yaml](skills-routing.yaml); it does not grant a skill authority to run commands or access systems.
 
 ## Security boundary
 
 - Every upstream repository is external. Installed content is pinned to the commit recorded in `skills-routing.yaml`; updates must be reviewed again.
 - A routing entry is not a permission. Tools, network access, repositories and side effects remain governed by the workspace policy and the runtime.
-- Use at most three relevant skills per task. Load a candidate body only after a task-specific review.
+- Use at most five relevant skills per task. Load a candidate body only after a task-specific review.
 - `grill-me`, `to-spec` and `improve-codebase-architecture` are manual-only.
 - Browser automation, CI/CD, containers, security scanners, mutation testing and external-model review are high-risk: require explicit human approval for operational use.
 - `insecure-defaults` was removed from routing: it is absent from the reviewed Trail of Bits revision, so no substitute was installed.
@@ -63,3 +63,23 @@ This catalog covers 68 reviewed, pinned upstream snapshots installed for Codex a
 ## Import provenance
 
 The routing was derived from `skills-routing.yaml` supplied on 2026-10-25 (SHA-256 `dac83a7e55e25df957492da9c39cebeeeda988e915d1094711f37883f27f1150`). The explanatory catalog was derived from `AGENT_SKILLS_CATALOG.md` supplied on 2026-10-25 (SHA-256 `6137de2f4770a83610ac8b49beceaa2cd6ad29224f64925244bca2555425f5ff`).
+
+## Added 2026-10-28
+
+Statically reviewed (scripts not executed), pinned and installed to all three locations. `agent-reach`, `hyperframes` and `find-skills` are marked high-risk.
+
+| Skill | Source @ commit | Roles (conditional) | Notes |
+| --- | --- | --- | --- |
+| hyperframes | [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) @ `2ddf41e` | developer, product | Apache-2.0. Drives `npx hyperframes`; `scripts/locate.mjs` reads `GEMINI_API_KEY` if set. Sibling skills (`hyperframes-cli`, `hyperframes-registry`, `media-use`) not installed. |
+| find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) @ `699d35b` | architect | MIT. Suggests `npx skills add -g -y`; any install still goes through review, pinning and `skill-inspector`. |
+| skill-inspector | [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) @ `e717246` | security, reviewer | Apache-2.0. Needs the `skillspector` CLI (not installed); falls back to manual review. Keep `--no-llm`. |
+| agent-reach | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) @ `14c2134` | researcher, browser | MIT. Upstream `SKILL_en.md` vendored as `SKILL.md` (the upstream `SKILL.md` is an unrendered template). Read-only by design, but copies per-site cookies from Chrome via OpenCLI and auto-installs dependencies on `add`. |
+
+SkillSpector v2.12.0 (`uv tool`, pinned `e717246`, Python 3.13), `--no-llm`, plus manual review:
+
+| Skill | Score | Verdict | Why |
+| --- | --- | --- | --- |
+| hyperframes | 77 HIGH | CAUTION | The 3 HIGH `P2` hits are design-doc HTML comments in `caption-skin.html`; the `AR2` hit is a sentence about version pins. Both are false positives. The 48 MEDIUM `RP1` hits are real: `npx hyperframes` runs unpinned, so pin the CLI version per project. |
+| find-skills | 12 LOW | CAUTION | 12 MEDIUM `RP1`: `npx skills` runs unpinned and uses `add -g -y`. |
+| skill-inspector | 0 LOW | APPROVE | No findings. |
+| agent-reach | 0 LOW | CAUTION | No static findings. It copies cookies and installs dependencies at runtime (see above). |

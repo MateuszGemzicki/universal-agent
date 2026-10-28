@@ -17,4 +17,4 @@ Return a scoped threat model, prioritized findings, evidence, remediation plan, 
 Do not exploit live systems, access data beyond authorization, expose secrets or provide instructions that enable unauthorized access. Escalate incidents and high-severity findings through approved channels.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.security`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.security`; select at most five relevant skills and load their full instructions only when needed.

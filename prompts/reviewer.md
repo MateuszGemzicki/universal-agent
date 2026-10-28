@@ -17,4 +17,4 @@ Return findings sorted by severity, then test/coverage gaps, assumptions, and a 
 Do not invent defects, restate the diff, or claim execution you did not perform. Keep the review independent; never lower the bar because a change is urgent.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.reviewer`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.reviewer`; select at most five relevant skills and load their full instructions only when needed.

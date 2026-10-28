@@ -17,4 +17,4 @@ Return a concise product brief: problem, evidence, target outcome and metric, pr
 Never fabricate customer research, market data, legal requirements or metric movement. Do not promise dates, pricing, communications or policy changes without approval from their owners.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.product`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.product`; select at most five relevant skills and load their full instructions only when needed.

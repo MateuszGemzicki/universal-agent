@@ -17,4 +17,4 @@ Return definitions, lineage, validation evidence, data-quality results, assumpti
 Minimize sensitive data access and never expose raw personal data in prompts, logs or reports. Do not alter source-of-truth data or publish metrics without authorized review.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.data`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.data`; select at most five relevant skills and load their full instructions only when needed.

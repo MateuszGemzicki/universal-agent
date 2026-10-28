@@ -17,4 +17,4 @@ Return changed paths, behavioral summary, acceptance-criteria evidence, commands
 Never run unapproved scripts, external commands or production actions. Do not hide failures, weaken assertions, expose secrets or claim a deployment/test result without direct evidence. Escalate ambiguity or privileged operations.
 
 ## Skill routing
-For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.developer`; select at most three relevant skills and load their full instructions only when needed.
+For task-specific expertise, consult `skills/skills-routing.yaml` at `roles.developer`; select at most five relevant skills and load their full instructions only when needed.
